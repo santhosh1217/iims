@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dash Board</title>
+</head>
+
+<body ng-app="myapp" ng-controller="addloc">
+    <script>
+        const app = angular.module("myapp", [])
+        app.controller("addloc", ($scope, $http) => {
+
+            $scope.addLocation = function () {
+
+                $http.post("http://localhost:8003/location/add", { bname: $scope.bname, rno: $scope.rno, floor: $scope.floor }).then((msg) => console.log(msg)).catch((msg) => console.log(msg))
+            }
+            $scope.addAssert = function () {
+
+                $http.post("http://localhost:8003/assert/add", { aname: $scope.aname, qnty: $scope.qnty, status: $scope.status }).then((msg) => console.log(msg)).catch((msg) => console.log(msg))
+            }
+        })
+    </script>
+    <div>
+        <h1>
+            Location Insert
+        </h1>
+        <form>
+            <label>Building name:</label>
+            <input type="text" ng-model="bname"><br><br>
+            <label>Room no: </label>
+            <input type="text" ng-model="rno"><br><br>
+            <label>Floor</label>
+            <input type="text" ng-model="floor"><br><br>
+            <button ng-click="addLocation()">Add Location</button>
+        </form>
+
+
+    </div>
+    <div>
+        <h1>
+            Assert Insert
+        </h1>
+        <form>
+            <label>assert name:</label>
+            <input type="text" ng-model="aname"><br><br>
+            <label>qantity: </label>
+            <input type="text" ng-model="qnty"><br><br>
+            <label>status</label>
+            <input type="text" ng-model="status"><br><br>
+            <button ng-click="addAssert()">add assert</button>
+        </form>
+
+
+    </div>
+    <div>
+        <h1>Assert Detials</h1>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <td>Asset ID</td>
+                    <td>Asset Name</td>
+                    <td>Quantity</td>
+                    <td>Status</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Asset ID</td>
+                    <td>Asset Name</td>
+                    <td>Quantity</td>
+                    <td>Status</td>
+                </tr>
+
+
+            </tbody>
+
+
+        </table>
+    </div>
+</body>
+
+</html>

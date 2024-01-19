@@ -1,10 +1,6 @@
-const {insertLocation} = require("../daos/locationDao")
-
-function postLocation(req=null,res=null)
+const { insertLocation } = require("../daos/locationDao")
+function postLocation(req, res) 
 {
-    //bussiness logic
-    //get data from req and res
-    insertLocation("psg st block",5,47)
-    
+    insertLocation(req.body.bname, req.body.rno, req.body.floor)
 }
-postLocation()
+module.exports = { postLocation }
