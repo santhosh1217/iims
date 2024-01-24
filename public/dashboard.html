@@ -16,15 +16,16 @@
 <body ng-app="myapp" ng-controller="addloc">
     <script>
         const app = angular.module("myapp", [])
-        app.controller("addloc", ($scope, $http) => {
+        app.controller("addloc", ($scope, $http, $window) => {
 
             $scope.addLocation = function () {
-
                 $http.post("http://localhost:8003/location/add", { bname: $scope.bname, rno: $scope.rno, floor: $scope.floor }).then((msg) => console.log(msg)).catch((msg) => console.log(msg))
+                $window.location.reload();
             }
             $scope.addAssert = function () {
-
-                $http.post("http://localhost:8003/assert/add", { aname: $scope.aname, qnty: $scope.qnty, status: $scope.status }).then((msg) => console.log(msg)).catch((msg) => console.log(msg))
+                $http.post("http://localhost:8003/assert/add", { aname: $scope.aname, qnty: $scope.qnty }).then((msg) =>
+                    console.log(msg)).catch((msg) => console.log(msg))
+                $window.location.reload()
             }
         })
     </script>
@@ -51,32 +52,154 @@
         <form>
             <label>assert name:</label>
             <input type="text" ng-model="aname"><br><br>
-            <label>qantity: </label>
+            <label>quantity: </label>
             <input type="text" ng-model="qnty"><br><br>
-            <label>status</label>
-            <input type="text" ng-model="status"><br><br>
+
             <button ng-click="addAssert()">add assert</button>
         </form>
 
 
     </div>
-    <div>
-        <h1>Assert Detials</h1>
+    <div ng-controller="assertdetails">
+        <h1>Assert Details</h1>
+
         <table class="table table-striped table-hover">
+            <script>
+                app.controller("assertdetails", ($scope, $http, $window) => {
+                    $scope.deleteAssert = function (id) 
+                    {
+                        $http.post(`http://127.0.0.1:8003/assert/delete/${id}`).then((msg) => {
+                            $scope.obj = msg.data
+                            console.log($scope.obj)
+                            $window.location.reload();
+                        })
+                    }
+                    $http.get("http://127.0.0.1:8003/assert/get").then((msg) => {
+                        $scope.obj = msg.data
+                        console.log($scope.obj)
+                    })
+
+                }
+
+
+                )
+
+            </script>
+            <input ng-model="search" placeholder="search">
             <thead>
                 <tr>
                     <td>Asset ID</td>
                     <td>Asset Name</td>
                     <td>Quantity</td>
-                    <td>Status</td>
+                    <td>Assigned</td>
+                    <td>In Stock</td>
+
                 </tr>
             </thead>
             <tbody>
+                <tr ng-repeat="i in obj | orderBy:search">
+                    <td>{{i._id}}</td>
+                    <td>{{i.AssertName}}</td>,
+                    <td>{{i.Quantity}}</td>
+                    <td>{{i.Assigned}}</td>
+                    <td>{{i.Stock}}</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Manage
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Deploy</a></li>
+                                <li><a class="dropdown-item" href="#">View Deployed Locations</a></li>
+
+                                <li><a class="dropdown-item" style="color:rgb(13, 223, 223)"
+                                        href="assert/edit/{{i._id}}">Edit</a> </li>
+
+
+
+
+
+                                <li><a style="color:red" class="dropdown-item" ng-click="deleteAssert(i._id)">Delete</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+
+
+            </tbody>
+
+
+        </table>
+    </div>
+    <div ng-controller="locationdetails" ng-init="getLocationDetials()">
+        <h1>Location Details</h1>
+
+        <table class="table table-striped table-hover">
+            <script>
+                app.controller("locationdetails", ($scope, $http,$window) => 
+                {
+                    $scope.getLocationDetials = function () 
+                    {
+                        
+                        $http.get("http://127.0.0.1:8003/location/get").then((msg) => {
+
+                            $scope.obj = msg.data
+                           
+                        })
+                    }
+                    $scope.deleteLocation = function(id)
+                    {
+                        $http.post(`http://127.0.0.1:8003/location/delete/${id}`).then((msg) => {
+                            $scope.obj = msg.data
+                            console.log($scope.obj)
+                            $window.location.reload();
+                        })
+                    }
+                }
+
+
+                )
+
+            </script>
+            <input ng-model="search" placeholder="search">
+            <thead>
                 <tr>
-                    <td>Asset ID</td>
-                    <td>Asset Name</td>
-                    <td>Quantity</td>
-                    <td>Status</td>
+                    <td>Location ID</td>
+                    <td>Building Name</td>
+                    <td>Room no</td>
+                    <td>Floor</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="i in obj | orderBy:search">
+                    <td>{{i._id}}</td>
+                    <td>{{i.BuildingName}}</td>
+                    <td>{{i.RoomNumber}}</td>
+                    <td>{{i.Floor}}</td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Manage
+                            </button>
+                            <ul class="dropdown-menu">
+                                <!-- <li><a class="dropdown-item" href="#">Deploy</a></li>
+                                <li><a class="dropdown-item" href="#">View Deployed Locations</a></li> -->
+
+                                <li><a class="dropdown-item" style="color:rgb(13, 223, 223)"
+                                        href="location/edit/{{i._id}}">Edit</a> </li>
+
+
+
+
+
+                                <li><a style="color:red" class="dropdown-item" ng-click="deleteLocation(i._id)">Delete</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
                 </tr>
 
 
