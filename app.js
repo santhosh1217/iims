@@ -11,6 +11,7 @@ const bodyParser = require("body-parser")
 const locationRoute = require("./routes/locationRouter")
 const assertRoute = require("./routes/assertRouter")
 const userRoute = require("./routes/userRouter")
+const dashboardRoute = require("./routes/dashboardRouter")
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
@@ -18,8 +19,8 @@ app.use(bodyParser.urlencoded({extended:true}))
 app.use("/location",locationRoute)
 app.use("/assert",assertRoute)
 app.use("/user",userRoute)
+app.use("/dashboard",dashboardRoute)
 
-app.get("/dashboard",(req,res)=>res.sendFile(path.join(__dirname,"public","dashboard.html")))
 app.get("/",(req,res)=>res.sendFile(path.join(__dirname,"public","login.html")))
 app.get("/signup",(req,res)=>res.sendFile(path.join(__dirname,"public","signup.html")))
 

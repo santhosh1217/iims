@@ -5,7 +5,7 @@ function insertLocation(buildingName,roomNumber,floor)
 {
     const database = getDb("iims") //getting iims database
     const collection = getCollection(database,"location") //getting location collection
-    collection.insertOne({BuildingName:buildingName,RoomNumber:roomNumber,Floor:floor}) //insert location in db   
+    collection.insertOne({BuildingName:buildingName,RoomNumber:roomNumber,Floor:floor , Assets:[]}) //insert location in db   
 }
 async function getLocation()
 {

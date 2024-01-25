@@ -5,7 +5,7 @@ function insertAssert(assertName, quantity) {
     console.log(assertName, quantity)
     const database = getDb("iims") //getting iims database
     const collection = getCollection(database, "assert") //getting location collection
-    collection.insertOne({ AssertName: assertName, Quantity: quantity, Assigned: 0, Stock: quantity }) //insert assert in db
+    collection.insertOne({ AssertName: assertName, Quantity: quantity, Assigned: 0, Stock: quantity , Locations:[] }) //insert assert in db
 
 }
 async function getAsserts() {
