@@ -1,32 +1,28 @@
 const express = require("express")
 const path = require("path")
-const app = express()
-const PORT =  8003
 const cors = require("cors")
 
-app.use(cors())
-
-const bodyParser = require("body-parser")
-
 const locationRoute = require("./routes/locationRouter")
-const assertRoute = require("./routes/assertRouter")
+const assetRoute = require("./routes/assetRouter")
 const userRoute = require("./routes/userRouter")
 const dashboardRoute = require("./routes/dashboardRouter")
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended:true}))
+const app = express()
+const PORT =  8003
 
-app.use("/location",locationRoute)
-app.use("/assert",assertRoute)
-app.use("/user",userRoute)
+//Middileware
+app.use(cors())
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
+
+//Routes
 app.use("/dashboard",dashboardRoute)
+app.use("/user",userRoute)
+app.use("/location",locationRoute)
+app.use("/assert",assetRoute)
 
-app.get("/",(req,res)=>res.sendFile(path.join(__dirname,"public","login.html")))
-app.get("/signup",(req,res)=>res.sendFile(path.join(__dirname,"public","signup.html")))
+app.get("/",(req,res)=>res.sendFile(path.join(__dirname,"./public/login.html")))
+app.get("/signup",(req,res)=>res.sendFile(path.join(__dirname,"./public/signup.html")))
 
-
-
-
-
-
+//server
 app.listen(PORT,()=>console.log(`server listening on port ${PORT}`))

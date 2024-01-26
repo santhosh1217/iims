@@ -1,30 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>login page</title>
+  <!-- Angular js -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/ngstorage/0.3.11/ngStorage.min.js"></script>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+    crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+    crossorigin="anonymous"></script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>login page</title>
 </head>
-<body>
-    <form>
-        <div class="form-group">
-          <label for="exampleInputEmail1">Email address</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" >
-          <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-        </div>
-        <div class="form-group">
-          <label for="exampleInputPassword1">Password</label>
-          <input type="password" class="form-control" id="exampleInputPassword1">
-        </div>
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="exampleCheck1">
-          <label class="form-check-label" for="exampleCheck1">Check me out</label>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <a  class="btn btn-primary" href="signup">For new user?</a>
-      </form>
-    
+
+<body ng-app="login">
+  <script>
+
+    const app = angular.module("login", ['ngStorage'])
+    app.controller("form", ($scope, $http, $window, $localStorage) => {
+      $scope.login = function()
+      {
+        console.log("sending...")
+        
+        $http.post("http://127.0.0.1:8003/user/login",{mail:$scope.mail,password:$scope.password}).then((data)=>
+      {
+        if(data.data.success)
+        {
+          console.log("login successfull")
+          alert(data.data.message)
+          $window.location.href = "http://127.0.0.1:8003/dashboard"
+
+        }
+        else
+        {
+          console.log("invalid detial")
+          alert(data.data.message)
+          $window.location.href = "http://127.0.0.1:8003/"
+        }
+      })
+      }
+      $scope.auth = function () 
+      {
+        console.log("checking token")
+        const token = $localStorage.token
+        
+        if(token) 
+        {
+          console.log("token found")
+
+          $http.post(`${$window.location.href}user/authenticate`, {headers: { Authorization: token} }).then((data) => 
+          {
+              if(data.data.success)
+              {
+                console.log("login successfull")
+                alert(data.data.message)
+                $window.location.href = "http://127.0.0.1:8003/dashboard"
+
+              }
+              else
+              {
+                console.log("invalid token")
+                alert(data.data.message)
+                
+              }
+          }
+          )
+          }
+
+
+          
+        }
+      }
+
+
+
+
+
+
+    )
+
+  </script>
+
+
+  <form ng-controller="form" ng-init="auth()">
+    <div class="form-group">
+      <label for="exampleInputEmail1">Email address</label>
+      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Password</label>
+      <input type="password" class="form-control" id="exampleInputPassword1" required>
+    </div>
+    <br>
+    <button type="submit" class="btn btn-primary" ng-click="login()">Login</button>
+    <a class="btn btn-primary" href="signup">For new user?</a>
+  </form>
+
 </body>
+
 </html>
