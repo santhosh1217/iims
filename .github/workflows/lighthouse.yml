@@ -21,6 +21,9 @@ jobs:
       - name: Install Lighthouse
         run: npm install -g lighthouse
 
+      - name: Install Puppeteer
+        run: npm install -g puppeteer
+
       - name: Install Xvfb
         run: sudo apt-get install -y xvfb
 
