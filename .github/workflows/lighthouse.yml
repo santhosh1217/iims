@@ -32,7 +32,7 @@ jobs:
 
       - name: Run Lighthouse for Desktop
         run: |
-          DISPLAY=:99 lighthouse https://cl1.imeapp.in \
+          DISPLAY=:99 lighthouse https://www.geeksforgeeks.org \
             --output html \
             --output-path ./lighthouse-report-desktop.html \
             --emulated-form-factor=desktop \
