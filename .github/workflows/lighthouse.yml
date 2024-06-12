@@ -11,21 +11,26 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2 
+        uses: actions/checkout@v2
 
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '14' # Use the appropriate Node.js version
 
+      - name: Clear npm cache
+        run: npm cache clean --force
+
+      - name: Reinstall dependencies
+        run: |
+          rm -rf node_modules
+          npm install
+
       - name: Install Lighthouse
-        run: npm install -g lighthouse
+        run: npm install -g lighthouse@latest
 
       - name: Install Puppeteer
-        run: npm install -g puppeteer
-
-      - name: Install Xvfb
-        run: sudo apt-get install -y xvfb
+        run: npm install -g puppeteer@latest
 
       - name: Start Xvfb
         run: Xvfb :99 -screen 0 1280x1024x24 > /dev/null 2>&1 &
