@@ -27,7 +27,6 @@ jobs:
             --output html \
             --output-path ./lighthouse-report-desktop.html \
             --emulated-form-factor=desktop \
-            --throttling-method=provided \
             --only-categories=performance,accessibility,best-practices,seo
 
       - name: Upload Lighthouse report for Desktop
